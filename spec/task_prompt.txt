@@ -1,0 +1,105 @@
+TASK: Generate a Hong Kong Hospital Authority (HA) context-locked web tool UI + calc engine.
+
+STACK:
+- React + TypeScript + Vite
+- No backend. All computations are client-side.
+- Store no personal data; do not use analytics by default.
+- Provide deterministic calculation functions suitable for golden-case regression tests.
+
+INPUTS / SPECS AVAILABLE IN REPO:
+- /spec/PRD.md (context-locked PRD; must follow)
+- /spec/fees_spec.json (authoritative constants + ASC semantics; must follow)
+- /spec/golden_cases.json (calculation_contract + expected outputs; must follow)
+- /spec/ui_copy_zh_hant.md (must use for all user-facing Chinese copy)
+- /spec/ui_wireframe.md (UI structure; must follow)
+
+NON-NEGOTIABLE REQUIREMENTS:
+1) NOT a generic calculator. It is Hong Kong HA only.
+2) Users MUST NOT input any HK$ fee numbers.
+   - All fee amounts and ASC amount are system constants from fees_spec.json (or config.ts derived from it).
+3) ASC is HK$10,000, calendar-year, advisory-only, NOT automatic, requires application + review.
+   - Must clearly state in UI copy (use ui_copy_zh_hant.md).
+4) Each specialty row MUST include:
+   - specialty label (text)
+   - service type (SOPC/GOPC; default SOPC)
+   - follow-up frequency (1/2/3/4/6 months)
+   - next follow-up month (1-12) REQUIRED
+   - medication tier (none/low/medium/high) REQUIRED
+5) Medication is NOT boolean; must use tiers.
+6) Output MUST include:
+   - average monthly estimate
+   - annual total
+   - peak month(s) and their totals
+   - 12-month distribution grid/table
+   - breakdown of visits vs medications per month (at least accessible via expand/collapse)
+7) Disclaimers must appear:
+   - near top (entry)
+   - near results (footer of results)
+8) i18n-ready Traditional Chinese labels; keep Hong Kong wording.
+9) Ensure determinism:
+   - Implement calc engine so it can match golden_cases.json expected outputs exactly.
+
+DELIVERABLES TO GENERATE:
+A) /src/config.ts
+   - export fee constants for SOPC/GOPC (visit fee, med unit fee)
+   - export ASC amount and advisory band thresholds
+   - NOTE: constants must be read-only and not user-editable via UI.
+B) /src/types.ts
+   - TypeScript types for SpecialtyInput, MonthlyBreakdown, CalculationResult, AscAdvisoryLevel.
+C) /src/calc.ts
+   - Functions:
+     - generateVisitScheduleMonths(nextMonth, frequencyMonths) => boolean[12] or month list
+     - getMedicationUnitsByTier(tier) => number[12] EXACTLY as contract in golden_cases.json
+     - calculateMonthlyTotals(inputs) => { monthlyTotals[12], breakdown.visits[12], breakdown.meds[12] }
+     - summarize(monthlyTotals) => { annualTotal, monthlyAverage, peakMonths, peakTotal }
+     - getAscAdvisory(annualTotal, ascAmount, bands) => advisory level + ratio
+   - Ensure outputs match golden_cases.json expected (including rounding).
+D) /src/components/*
+   - SpecialtyTable (editable rows; no fee inputs)
+   - ResultsPanel (sticky summary optional)
+   - MonthlyGrid (12-month display)
+   - AscPanel (advisory messages + action links text; no raw URLs required)
+E) /src/App.tsx
+   - Assemble UI according to ui_wireframe.md.
+F) /src/main.tsx + /index.html
+   - Standard Vite entry.
+
+TESTING SUPPORT (optional but preferred if time):
+- /src/dev/goldenCheck.ts
+  - A small dev-only function that loads golden_cases.json (import as json), runs calc, console.logs pass/fail.
+
+UI RULES:
+- No input fields for:
+  - visit_fee
+  - medication_fee
+  - asc_amount
+  - any threshold numbers
+- Show fee amounts as read-only text (sourced from config), e.g.
+  - "專科門診診症費：HK$250／次"
+  - "專科門診藥費：HK$20／每4星期（系統按月估算）"
+- Use ui_copy_zh_hant.md for all public-facing copy.
+
+CALC RULES (MUST FOLLOW golden_cases calculation_contract):
+- Use exact medication units patterns by tier:
+  - none:  [0,0,0,0,0,0,0,0,0,0,0,0]
+  - low:   [1,1,1,1,1,1,1,1,1,1,1,1]
+  - medium:[1,1,2,1,1,2,1,1,2,1,1,2]
+  - high:  [1,2,1,2,1,3,1,2,1,2,1,3]
+- Visits: from next_followup_month inclusive, every frequency months within 1..12
+- Monthly total = sum(visit fees scheduled in month) + sum(med units * med_unit_fee)
+- Annual total = sum(monthly totals)
+- Monthly average = annual / 12, rounded to 2 decimals
+- Peak months = months where monthly total equals max total (can be multiple)
+
+OUTPUT FORMAT IN UI:
+- Month labels: 1月..12月
+- Display totals as HK$ integer where applicable; average with 2 decimals.
+
+ACCESSIBILITY:
+- Use clear headings.
+- Support larger font via browser zoom; avoid fixed pixel fonts.
+
+DO NOT:
+- Add region/currency switchers
+- Ask users to enter fee numbers
+- Claim ASC eligibility or automatic cap application

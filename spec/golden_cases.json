@@ -1,0 +1,362 @@
+{
+  "calculation_contract": {
+    "medication_units_by_tier": {
+      "none": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "low": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      "medium": [1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2],
+      "high": [1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3]
+    },
+    "visit_scheduling": {
+      "rule": "Starting from next_followup_month (inclusive), schedule visits every followup_frequency_months within months 1-12",
+      "examples": {
+        "next_followup_month_3_frequency_3": [
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "next_followup_month_1_frequency_2": [
+          true,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          false
+        ]
+      }
+    },
+    "monthly_calculation": {
+      "formula": "sum(visit_fees_scheduled_in_month) + (medication_units_in_month * medication_unit_fee)"
+    },
+    "annual_summary": {
+      "annual_total": "sum of all 12 monthly totals",
+      "monthly_average": "annual_total / 12, rounded to 2 decimals",
+      "peak_months": "all months where monthly_total equals max(monthly_totals)"
+    }
+  },
+  "test_cases": [
+    {
+      "case_id": "case_001_single_sopc_low_med_q3",
+      "description": "Single SOPC specialty, low medication tier, quarterly visits starting month 3",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "內科",
+            "service_type": "sopc",
+            "followup_frequency_months": 3,
+            "next_followup_month": 3,
+            "medication_tier": "low"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [20, 20, 270, 20, 20, 270, 20, 20, 270, 20, 20, 270],
+        "breakdown": {
+          "visits": [0, 0, 250, 0, 0, 250, 0, 0, 250, 0, 0, 250],
+          "medications": [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+        },
+        "annual_total": 1080,
+        "monthly_average": 90.0,
+        "peak_months": [3, 6, 9, 12],
+        "peak_total": 270
+      }
+    },
+    {
+      "case_id": "case_002_single_sopc_medium_med_q2_start1",
+      "description": "Single SOPC specialty, medium medication tier, bi-monthly visits starting month 1",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "骨科",
+            "service_type": "sopc",
+            "followup_frequency_months": 2,
+            "next_followup_month": 1,
+            "medication_tier": "medium"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [270, 20, 290, 250, 20, 290, 250, 20, 290, 250, 20, 290],
+        "breakdown": {
+          "visits": [250, 0, 250, 0, 250, 0, 250, 0, 250, 0, 250, 0],
+          "medications": [20, 20, 40, 20, 20, 40, 20, 20, 40, 20, 20, 40]
+        },
+        "annual_total": 2240,
+        "monthly_average": 186.67,
+        "peak_months": [3, 6, 9, 12],
+        "peak_total": 290
+      }
+    },
+    {
+      "case_id": "case_003_single_sopc_high_med_q4",
+      "description": "Single SOPC specialty, high medication tier, quarterly visits starting month 4",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "心臟科",
+            "service_type": "sopc",
+            "followup_frequency_months": 4,
+            "next_followup_month": 4,
+            "medication_tier": "high"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [20, 40, 20, 290, 20, 60, 20, 290, 20, 40, 20, 60],
+        "breakdown": {
+          "visits": [0, 0, 0, 250, 0, 0, 0, 250, 0, 0, 0, 0],
+          "medications": [20, 40, 20, 40, 20, 60, 20, 40, 20, 40, 20, 60]
+        },
+        "annual_total": 900,
+        "monthly_average": 75.0,
+        "peak_months": [4, 8],
+        "peak_total": 290
+      }
+    },
+    {
+      "case_id": "case_004_two_specialties_sopc_mixed",
+      "description": "Two SOPC specialties with different schedules and medication tiers",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "內分泌科",
+            "service_type": "sopc",
+            "followup_frequency_months": 3,
+            "next_followup_month": 2,
+            "medication_tier": "medium"
+          },
+          {
+            "specialty_label": "腎科",
+            "service_type": "sopc",
+            "followup_frequency_months": 2,
+            "next_followup_month": 1,
+            "medication_tier": "low"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [290, 310, 60, 270, 60, 310, 60, 310, 60, 270, 60, 310],
+        "breakdown": {
+          "visits": [250, 250, 0, 250, 0, 250, 0, 250, 0, 250, 0, 250],
+          "medications": [40, 60, 60, 20, 60, 60, 60, 60, 60, 20, 60, 60]
+        },
+        "annual_total": 2070,
+        "monthly_average": 172.5,
+        "peak_months": [2, 6, 8, 12],
+        "peak_total": 310
+      }
+    },
+    {
+      "case_id": "case_005_gopc_only_low_med",
+      "description": "Single GOPC specialty with low medication tier, monthly visits",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "普通科",
+            "service_type": "gopc",
+            "followup_frequency_months": 1,
+            "next_followup_month": 1,
+            "medication_tier": "low"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [155, 155, 155, 155, 155, 155, 155, 155, 155, 155, 155, 155],
+        "breakdown": {
+          "visits": [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
+          "medications": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        },
+        "annual_total": 1860,
+        "monthly_average": 155.0,
+        "peak_months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        "peak_total": 155
+      }
+    },
+    {
+      "case_id": "case_006_mixed_sopc_gopc",
+      "description": "One SOPC and one GOPC specialty with different schedules",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "皮膚科",
+            "service_type": "sopc",
+            "followup_frequency_months": 6,
+            "next_followup_month": 1,
+            "medication_tier": "none"
+          },
+          {
+            "specialty_label": "普通科",
+            "service_type": "gopc",
+            "followup_frequency_months": 2,
+            "next_followup_month": 2,
+            "medication_tier": "medium"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [250, 165, 15, 165, 15, 15, 250, 165, 15, 165, 15, 15],
+        "breakdown": {
+          "visits": [250, 150, 0, 150, 0, 0, 250, 150, 0, 150, 0, 0],
+          "medications": [0, 15, 15, 15, 15, 15, 0, 15, 15, 15, 15, 15]
+        },
+        "annual_total": 1245,
+        "monthly_average": 103.75,
+        "peak_months": [1, 7],
+        "peak_total": 250
+      }
+    },
+    {
+      "case_id": "case_007_high_cost_multiple_specialties",
+      "description": "Three SOPC specialties with high medication usage, testing ASC threshold",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "心臟科",
+            "service_type": "sopc",
+            "followup_frequency_months": 2,
+            "next_followup_month": 1,
+            "medication_tier": "high"
+          },
+          {
+            "specialty_label": "腎科",
+            "service_type": "sopc",
+            "followup_frequency_months": 3,
+            "next_followup_month": 2,
+            "medication_tier": "high"
+          },
+          {
+            "specialty_label": "內分泌科",
+            "service_type": "sopc",
+            "followup_frequency_months": 3,
+            "next_followup_month": 1,
+            "medication_tier": "medium"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [560, 640, 140, 330, 140, 640, 140, 640, 140, 330, 140, 640],
+        "breakdown": {
+          "visits": [500, 500, 0, 250, 0, 500, 0, 500, 0, 250, 0, 500],
+          "medications": [60, 140, 140, 80, 140, 140, 140, 140, 140, 80, 140, 140]
+        },
+        "annual_total": 4480,
+        "monthly_average": 373.33,
+        "peak_months": [2, 6, 8, 12],
+        "peak_total": 640
+      }
+    },
+    {
+      "case_id": "case_008_no_medication",
+      "description": "Multiple specialties with no medication prescriptions",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "外科",
+            "service_type": "sopc",
+            "followup_frequency_months": 4,
+            "next_followup_month": 3,
+            "medication_tier": "none"
+          },
+          {
+            "specialty_label": "眼科",
+            "service_type": "sopc",
+            "followup_frequency_months": 6,
+            "next_followup_month": 5,
+            "medication_tier": "none"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [0, 0, 250, 0, 250, 0, 250, 0, 0, 0, 250, 0],
+        "breakdown": {
+          "visits": [0, 0, 250, 0, 250, 0, 250, 0, 0, 0, 250, 0],
+          "medications": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        "annual_total": 1000,
+        "monthly_average": 83.33,
+        "peak_months": [3, 5, 7, 11],
+        "peak_total": 250
+      }
+    },
+    {
+      "case_id": "case_009_asc_threshold_test_above",
+      "description": "Testing annual total exceeding ASC cap (10000 HKD)",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "心臟科",
+            "service_type": "sopc",
+            "followup_frequency_months": 1,
+            "next_followup_month": 1,
+            "medication_tier": "high"
+          },
+          {
+            "specialty_label": "腎科",
+            "service_type": "sopc",
+            "followup_frequency_months": 1,
+            "next_followup_month": 1,
+            "medication_tier": "high"
+          },
+          {
+            "specialty_label": "內分泌科",
+            "service_type": "sopc",
+            "followup_frequency_months": 1,
+            "next_followup_month": 1,
+            "medication_tier": "high"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [840, 930, 840, 930, 840, 990, 840, 930, 840, 930, 840, 990],
+        "breakdown": {
+          "visits": [750, 750, 750, 750, 750, 750, 750, 750, 750, 750, 750, 750],
+          "medications": [90, 180, 90, 180, 90, 240, 90, 180, 90, 180, 90, 240]
+        },
+        "annual_total": 10740,
+        "monthly_average": 895.0,
+        "peak_months": [6, 12],
+        "peak_total": 990
+      }
+    },
+    {
+      "case_id": "case_010_single_visit_per_year",
+      "description": "Specialty with single visit in year (frequency 6, starting month 8)",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "耳鼻喉科",
+            "service_type": "sopc",
+            "followup_frequency_months": 6,
+            "next_followup_month": 8,
+            "medication_tier": "low"
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [20, 20, 20, 20, 20, 20, 20, 270, 20, 20, 20, 20],
+        "breakdown": {
+          "visits": [0, 0, 0, 0, 0, 0, 0, 250, 0, 0, 0, 0],
+          "medications": [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+        },
+        "annual_total": 490,
+        "monthly_average": 40.83,
+        "peak_months": [8],
+        "peak_total": 270
+      }
+    }
+  ]
+}

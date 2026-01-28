@@ -1,0 +1,36 @@
+You are building a Hong Kong Hospital Authority (HA) context-locked web tool.
+This is NOT a generic calculator. It must feel native to HA public fees.
+
+NON-NEGOTIABLE CONSTRAINTS (must follow):
+1) Fee amounts and fee categories are authoritative system constants. Users MUST NOT input any HK$ fee numbers.
+   - All consultation fees, medication unit fees, and HA Annual Spending Cap (ASC) amount are read-only system constants.
+2) The tool targets "eligible persons" under HA public fees. Default patient type = eligible.
+3) UI must be patient-centric (monthly/yearly), but internal medication unit may be 4-week. Do not expose 4-week unit as the primary mental model.
+4) The biggest cost driver is medication. A boolean "has prescription" is insufficient.
+   - Replace with medication complexity tiers per specialty: Low(1-2), Medium(3-4), High(>=5).
+   - Use tiers to model refill frequency variability and peak-month risk (not drug price).
+5) Each specialty MUST include a "Next follow-up month (1-12)" input, because patients can check upcoming appointments.
+   - Use this to generate month-by-month distribution and peak month.
+6) Annual Spending Cap (ASC) must be accurate and contextual:
+   - ASC amount is HK$10,000 (system constant).
+   - ASC counts only paid eligible charges; excludes self-financed items.
+   - ASC is NOT automatic; user must apply via HA Go or hospital payment office; subject to review; not instant; no refund for fees paid before approval.
+   - Advisory prompts must NEVER claim eligibility; must use probabilistic language and direct users to official channels.
+7) Disclaimers must be present at entry and results:
+   - Estimation only; actual charges follow HA systems.
+   - ASC requires application + approval.
+8) The UI must not contain editable fields for fee amount, annual cap amount, or waiver thresholds.
+   - Those are configuration values controlled by admins, not by end users.
+
+DELIVERABLE REQUIREMENTS:
+- Build a single-page web app with:
+  A) Specialty list editor: add/remove specialties.
+     Fields: Specialty label, frequency (1/2/3/4/6 months), next follow-up month (1-12), long-term follow-up flag,
+             medication tier (none/low/medium/high).
+  B) Results panel: average monthly, annual total, peak month cost + which months are peak.
+  C) A month-by-month grid showing costs for 12 months.
+  D) ASC advisory panel:
+     - Trigger by annual_estimate / 10000 bands: <50% hidden; 50-80 notice; 80-100 advisory; >=100 strong advisory.
+     - Include “must apply + approval + not automatic” wording and “HA Go / payment office” guidance.
+- The code must be deterministic, transparent, and easy to adjust constants in a config object.
+- Use i18n-ready Traditional Chinese labels; keep Hong Kong wording.

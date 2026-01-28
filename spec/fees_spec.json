@@ -1,0 +1,211 @@
+{
+  "spec_version": "1.1.0",
+  "jurisdiction": "HK",
+  "provider": "Hospital Authority",
+  "currency": "HKD",
+  "source": {
+    "fees_url": "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=10045&Lang=CHIB5",
+    "asc_url": "https://www.ha.org.hk/visitor/ha_view_content_print.asp?path=haho%2Fho%2Ffrm%2Fasc_tc.htm",
+    "note_zh_hant": "本規格用於估算與提示；實際收費、ASC適用與審核結果以醫管局系統及公告為準。"
+  },
+  "patient_types": [
+    {
+      "id": "eligible_person",
+      "label_zh_hant": "符合資格人士",
+      "default": true
+    }
+  ],
+  "units": {
+    "per_attendance": { "id": "per_attendance", "label_zh_hant": "每次" },
+    "per_day": { "id": "per_day", "label_zh_hant": "每日" },
+    "per_4_weeks": {
+      "id": "per_4_weeks",
+      "label_zh_hant": "每4星期",
+      "notes_zh_hant": "內部計算單位；前端以『約每月』呈現。"
+    }
+  },
+  "inputs": {
+    "specialties": {
+      "type": "array",
+      "min_items": 0,
+      "item_schema": {
+        "specialty_label": {
+          "type": "string",
+          "required": true,
+          "notes_zh_hant": "用戶可輸入或選擇；不影響收費常數。"
+        },
+        "service_type": {
+          "type": "enum",
+          "required": true,
+          "default": "sopc",
+          "options": [
+            { "id": "sopc", "label_zh_hant": "專科門診" },
+            { "id": "gopc", "label_zh_hant": "普通科門診" }
+          ],
+          "notes_zh_hant": "本期以門診為核心；其他服務類型可日後擴展。"
+        },
+        "followup_frequency_months": {
+          "type": "enum",
+          "required": true,
+          "options": [1, 2, 3, 4, 6]
+        },
+        "next_followup_month": {
+          "type": "integer",
+          "required": true,
+          "min": 1,
+          "max": 12,
+          "notes_zh_hant": "病人可從HA系統/提醒得知，用於月度分佈與高峰月推算。"
+        },
+        "long_term_followup": {
+          "type": "boolean",
+          "required": true,
+          "default": true
+        },
+        "medication_tier": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            { "id": "none", "label_zh_hant": "無處方藥" },
+            { "id": "low", "label_zh_hant": "少量（1–2種）" },
+            { "id": "medium", "label_zh_hant": "中量（3–4種）" },
+            { "id": "high", "label_zh_hant": "多量（≥5種）" }
+          ],
+          "notes_zh_hant": "用於估算補藥節奏與高峰月風險；不代表藥價。"
+        }
+      }
+    }
+  },
+  "authoritative_constants": {
+    "fee_table_editable_by_user": false,
+    "notes_zh_hant": "所有收費金額及ASC上限均為系統常數（或由管理配置），不可由公眾使用者輸入。"
+  },
+  "fees": [
+    {
+      "id": "sopc_attendance",
+      "patient_type_id": "eligible_person",
+      "service_group": "outpatient_specialist",
+      "service_type": "sopc",
+      "service_label_zh_hant": "專科門診診症",
+      "amount": 250,
+      "unit_id": "per_attendance"
+    },
+    {
+      "id": "sopc_medication_unit",
+      "patient_type_id": "eligible_person",
+      "service_group": "outpatient_specialist",
+      "service_type": "sopc",
+      "service_label_zh_hant": "專科門診處方藥物（非自費藥）",
+      "amount": 20,
+      "unit_id": "per_4_weeks",
+      "billing_rules": {
+        "charge_unit_basis": "per_specialty_per_4_weeks",
+        "notes_zh_hant": "同一專科同一4星期收費單位內不重複；不同專科分開計；不包括自費藥。"
+      }
+    },
+    {
+      "id": "gopc_attendance",
+      "patient_type_id": "eligible_person",
+      "service_group": "outpatient_general",
+      "service_type": "gopc",
+      "service_label_zh_hant": "普通科門診診症",
+      "amount": 150,
+      "unit_id": "per_attendance"
+    },
+    {
+      "id": "gopc_medication_unit",
+      "patient_type_id": "eligible_person",
+      "service_group": "outpatient_general",
+      "service_type": "gopc",
+      "service_label_zh_hant": "普通科門診處方藥物（非自費藥）",
+      "amount": 5,
+      "unit_id": "per_4_weeks",
+      "billing_rules": {
+        "charge_unit_basis": "per_clinic_per_4_weeks",
+        "notes_zh_hant": "按每4星期為收費單位；不包括自費藥。"
+      }
+    }
+  ],
+  "annual_spending_cap": {
+    "id": "asc",
+    "label_zh_hant": "全年收費上限（ASC）",
+    "enabled": true,
+    "cap_amount": 10000,
+    "cycle": {
+      "type": "calendar_year",
+      "start_month": 1,
+      "start_day": 1,
+      "end_month": 12,
+      "end_day": 31
+    },
+    "counts_towards_cap": {
+      "principle_zh_hant": "只計算已繳付的合資格醫療費用及收費。",
+      "includes_examples_zh_hant": [
+        "公眾收費（符合資格人士）下的合資格醫療費用及收費"
+      ],
+      "excludes_examples_zh_hant": [
+        "自費藥物",
+        "自費醫療用品",
+        "非臨床需要服務相關收費"
+      ]
+    },
+    "application_and_effect": {
+      "not_automatic": true,
+      "requires_application": true,
+      "channels_zh_hant": ["HA Go", "醫院繳費處"],
+      "requires_review": true,
+      "not_instant_effect": true,
+      "no_refund_before_approval": true,
+      "notes_zh_hant": "ASC需主動申請並經審核後方生效；申請前已繳付費用一般不會退款。"
+    },
+    "copy_constraints": {
+      "must_not_claim_eligibility": true,
+      "must_use_probabilistic_language": true,
+      "must_state_requires_application_and_review": true
+    }
+  },
+  "advisory_bands": {
+    "asc_ratio_bands": [
+      { "id": "none", "min": 0.0, "max": 0.5, "ui": "hide" },
+      { "id": "notice", "min": 0.5, "max": 0.8, "ui": "show_notice" },
+      { "id": "advisory", "min": 0.8, "max": 1.0, "ui": "show_advisory" },
+      {
+        "id": "strong_advisory",
+        "min": 1.0,
+        "max": 999999.0,
+        "ui": "show_strong_advisory"
+      }
+    ]
+  },
+  "estimation_model": {
+    "month_distribution": {
+      "uses_next_followup_month": true,
+      "notes_zh_hant": "以每科下次覆診月份作起點，按頻率向後推算全年月份分佈，產生高峰月份與月度格。"
+    },
+    "medication_refill_model": {
+      "uses_tier": true,
+      "tier_behavior": [
+        {
+          "tier": "none",
+          "refill_units_per_year": 0,
+          "notes_zh_hant": "不計藥費"
+        },
+        {
+          "tier": "low",
+          "refill_pattern": "stable_monthly_like",
+          "notes_zh_hant": "以較穩定補藥節奏估算（低變異）"
+        },
+        {
+          "tier": "medium",
+          "refill_pattern": "some_variance",
+          "notes_zh_hant": "中等變異，可能出現跨月補藥造成局部高峰"
+        },
+        {
+          "tier": "high",
+          "refill_pattern": "high_variance_peak_risk",
+          "notes_zh_hant": "較高變異與高峰風險，偏向保守估算"
+        }
+      ],
+      "important_note_zh_hant": "此模型只用於費用節奏估算，不代表藥價或臨床判斷。"
+    }
+  }
+}

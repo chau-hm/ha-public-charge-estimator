@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HA Cost Calculator Config",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "fees": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sopc": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visitFee": { "type": "number", "const": 250 },
+            "medUnitFeePer4Weeks": { "type": "number", "const": 20 }
+          },
+          "required": ["visitFee", "medUnitFeePer4Weeks"]
+        },
+        "gopc": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visitFee": { "type": "number", "const": 150 },
+            "medUnitFeePer4Weeks": { "type": "number", "const": 5 }
+          },
+          "required": ["visitFee", "medUnitFeePer4Weeks"]
+        }
+      },
+      "required": ["sopc", "gopc"]
+    },
+    "asc": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": { "type": "number", "const": 10000 },
+        "bands": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": ["none", "notice", "advisory", "strong_advisory"]
+              },
+              "min": { "type": "number" },
+              "max": { "type": "number" }
+            },
+            "required": ["id", "min", "max"]
+          }
+        }
+      },
+      "required": ["amount", "bands"]
+    }
+  },
+  "required": ["fees", "asc"]
+}
