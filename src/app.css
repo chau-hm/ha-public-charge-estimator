@@ -40,6 +40,36 @@ button {
   margin-bottom: 16px;
 }
 
+.info-section {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e8e8e8;
+}
+
+.info-section h2 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.features-list,
+.suitable-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.features-list li,
+.suitable-list li {
+  padding: 8px 0;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+}
+
 .disclaimer-box {
   background: #f5f5f5;
   padding: 16px;
