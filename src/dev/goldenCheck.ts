@@ -3,9 +3,9 @@
  * Loads golden_cases.json and validates calculation results
  */
 
-import goldenCases from "../../spec/golden_cases.json";
-import { calculate } from "../calc";
-import type { SpecialtyInput } from "../types";
+import goldenCases from "../../spec/golden_cases.json" assert { type: "json" };
+import { calculate } from "../calc.js";
+import type { SpecialtyInput } from "../types.js";
 
 interface GoldenCase {
   case_id: string;
