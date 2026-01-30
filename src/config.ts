@@ -46,7 +46,7 @@ export const SERVICE_TYPES = {
 
 // UI Labels (Traditional Chinese - Hong Kong)
 export const UI_LABELS = {
-  PAGE_TITLE: "香港公共醫療費用計算器（2026版）",
+  PAGE_TITLE: "香港公營醫療費用計算器（2026版）",
   DISCLAIMERS: {
     MAIN: "本工具僅供估算及參考用途，並不構成實際收費或任何資格判定。實際收費以醫管局系統及相關公告為準。",
     ASC: "「全年收費上限」須由病人主動申請並經審核後方可生效，並非自動套用；申請前已繳付的費用一般不會退款。",

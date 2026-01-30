@@ -1,4 +1,4 @@
-# 公眾醫療費用計算器（香港醫管局制度版）
+# 公營醫療費用計算器（香港醫管局制度版）
 
 ## Product Requirements Document（PRD）
 
