@@ -5,9 +5,6 @@
 // Service types
 export type ServiceType = "sopc" | "gopc";
 
-// Medication tiers
-export type MedicationTier = "none" | "low" | "medium" | "high";
-
 // Followup frequencies (in months)
 export type FollowupFrequency = 1 | 2 | 3 | 4 | 6;
 
@@ -23,7 +20,7 @@ export interface SpecialtyInput {
   service_type: ServiceType;
   followup_frequency_months: FollowupFrequency;
   next_followup_month: MonthNumber;
-  medication_tier: MedicationTier;
+  medication_quantity: number; // 0-10 medication units per month
 }
 
 /**

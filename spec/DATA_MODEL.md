@@ -14,7 +14,7 @@
 | followup_frequency_months | 1\|2\|3\|4\|6 | ✅ | 覆診頻率（每幾個月一次） |
 | next_followup_month | number (1..12) | ✅ | 下次覆診月份，用作月度分佈 offset |
 | long_term_followup | boolean | ✅ | 本期回歸假設 true；若 false 可只計一次（由實作另定） |
-| medication_tier | "none"\|"low"\|"medium"\|"high" | ✅ | 藥物數量級（只作補藥節奏估算，不代表藥價） |
+| medication_quantity | number (0..10) | ✅ | 每月藥物數量（0-10種），用於準確計算藥費 |
 
 ---
 
@@ -44,8 +44,6 @@
 
 ## 4. Determinism（確定性要求）
 
-- medication units pattern 必須完全依 `spec/golden_cases.json` 的 `calculation_contract`：
-  - none:  [0,0,0,0,0,0,0,0,0,0,0,0]
-  - low:   [1,1,1,1,1,1,1,1,1,1,1,1]
-  - medium:[1,1,2,1,1,2,1,1,2,1,1,2]
-  - high:  [1,2,1,2,1,3,1,2,1,2,1,3]
+- medication quantity 直接作為月度藥費計算的倍數（quantity * medication_unit_fee）
+  - 所有月份套用相同 quantity 值
+  - 範例：quantity=2 時，每月藥費 = 2 * medication_unit_fee

@@ -3,7 +3,7 @@
  * All calculations must match golden_cases.json expected outputs
  */
 
-import { FEES, ASC, ADVISORY_BANDS, MEDICATION_UNITS_BY_TIER } from "./config";
+import { FEES, ASC, ADVISORY_BANDS } from "./config";
 import type {
   SpecialtyInput,
   MonthlyBreakdown,
@@ -12,8 +12,6 @@ import type {
   AscAdvisory,
   AscAdvisoryLevel,
   VisitSchedule,
-  MedicationUnits,
-  MedicationTier,
   ServiceType,
   MonthNumber
 } from "./types";
@@ -36,15 +34,6 @@ export function generateVisitScheduleMonths(
   }
 
   return schedule;
-}
-
-/**
- * Get medication units for each month based on tier
- * @param tier - Medication tier (none, low, medium, high)
- * @returns Array of 12 numbers representing medication units per month
- */
-export function getMedicationUnitsByTier(tier: MedicationTier): MedicationUnits {
-  return [...MEDICATION_UNITS_BY_TIER[tier]];
 }
 
 /**
@@ -92,9 +81,6 @@ export function calculateMonthlyTotals(inputs: SpecialtyInput[]): {
       specialty.followup_frequency_months
     );
 
-    // Get medication units
-    const medicationUnits = getMedicationUnitsByTier(specialty.medication_tier);
-
     // Calculate fees for each month
     for (let month = 0; month < 12; month++) {
       // Add visit fee if scheduled
@@ -103,7 +89,7 @@ export function calculateMonthlyTotals(inputs: SpecialtyInput[]): {
       }
 
       // Add medication fee
-      const medFee = medicationUnits[month] * medUnitFee;
+      const medFee = specialty.medication_quantity * medUnitFee;
       medicationBreakdown[month] += medFee;
     }
   }

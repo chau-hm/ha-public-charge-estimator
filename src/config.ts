@@ -35,14 +35,6 @@ export const ADVISORY_BANDS = {
   STRONG_ADVISORY: { MIN: 1.0, MAX: Infinity, UI: "show_strong_advisory" }
 } as const;
 
-// Medication tier constants (for medication units per month calculation)
-export const MEDICATION_UNITS_BY_TIER = {
-  none: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  low: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  medium: [1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2],
-  high: [1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3]
-} as const;
-
 // Followup frequency options (in months)
 export const FOLLOWUP_FREQUENCIES = [1, 2, 3, 4, 6] as const;
 
@@ -73,25 +65,19 @@ export const UI_LABELS = {
     SERVICE_TYPE: "服務類型",
     FOLLOWUP_FREQUENCY: "覆診頻率（每幾個月一次）",
     NEXT_FOLLOWUP_MONTH: "下次覆診月份",
-    MEDICATION: "藥物（數量級）",
+    MEDICATION: "藥物數目（每月）",
     REMOVE: "移除"
   },
   SERVICE_TYPE_OPTIONS: {
     SOPC: "專科門診",
     GOPC: "普通科門診"
   },
-  MEDICATION_TIER_OPTIONS: {
-    NONE: "無處方藥",
-    LOW: "少量（1–2種）",
-    MEDIUM: "中量（3–4種）",
-    HIGH: "多量（≥5種）"
-  },
   RESULTS: {
     SECTION_TITLE: "估算結果",
     MONTHLY_AVERAGE: "平均每月費用（估算）",
     ANNUAL_TOTAL: "全年累計費用（估算）",
     PEAK_MONTHS: "最高支出月份（估算）",
-    EXPLANATION: "全年費用已按你輸入的覆診月份及藥物數量級模擬分佈，個別月份可能明顯高於平均值。"
+    EXPLANATION: "全年費用已按你輸入的覆診月份及藥物數目模擬分佈，個別月份可能明顯高於平均值。"
   },
   MONTHLY_DISTRIBUTION: {
     SECTION_TITLE: "全年費用分佈（按月份）",

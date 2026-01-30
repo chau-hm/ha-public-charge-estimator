@@ -106,23 +106,16 @@ export function SpecialtyTable({
                     </td>
                     <td>
                       <select
-                        value={specialty.medication_tier}
+                        value={specialty.medication_quantity}
                         onChange={(e) =>
-                          handleFieldChange(index, 'medication_tier', e.target.value)
+                          handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
                         }
                       >
-                        <option value="none">
-                          {UI_LABELS.MEDICATION_TIER_OPTIONS.NONE}
-                        </option>
-                        <option value="low">
-                          {UI_LABELS.MEDICATION_TIER_OPTIONS.LOW}
-                        </option>
-                        <option value="medium">
-                          {UI_LABELS.MEDICATION_TIER_OPTIONS.MEDIUM}
-                        </option>
-                        <option value="high">
-                          {UI_LABELS.MEDICATION_TIER_OPTIONS.HIGH}
-                        </option>
+                        {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
+                          <option key={qty} value={qty}>
+                            {qty}
+                          </option>
+                        ))}
                       </select>
                     </td>
                     <td>
@@ -216,23 +209,16 @@ export function SpecialtyTable({
                 <div className="card-field">
                   <label>{UI_LABELS.FIELDS.MEDICATION}</label>
                   <select
-                    value={specialty.medication_tier}
+                    value={specialty.medication_quantity}
                     onChange={(e) =>
-                      handleFieldChange(index, 'medication_tier', e.target.value)
+                      handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
                     }
                   >
-                    <option value="none">
-                      {UI_LABELS.MEDICATION_TIER_OPTIONS.NONE}
-                    </option>
-                    <option value="low">
-                      {UI_LABELS.MEDICATION_TIER_OPTIONS.LOW}
-                    </option>
-                    <option value="medium">
-                      {UI_LABELS.MEDICATION_TIER_OPTIONS.MEDIUM}
-                    </option>
-                    <option value="high">
-                      {UI_LABELS.MEDICATION_TIER_OPTIONS.HIGH}
-                    </option>
+                    {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
+                      <option key={qty} value={qty}>
+                        {qty}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -252,9 +238,9 @@ export function SpecialtyTable({
       <button onClick={onAdd} className="add-button primary">
         {UI_LABELS.BUTTONS.ADD_SPECIALTY}
       </button>
-
+          藥物數目只用於估算每月藥費，並不代表藥價或臨床判斷。
       <p className="helper-text">
-        藥物數量級只用於估算補藥節奏與高峰風險，並不代表藥價或臨床判斷。
+        請輸入每月服用的藥物數目（0-10種）。此數字僅供估算月度支出，並不代表實際藥價或臨床用藥判斷。
       </p>
     </div>
   );

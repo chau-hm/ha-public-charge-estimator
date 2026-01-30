@@ -61,16 +61,13 @@
           "required": true,
           "default": true
         },
-        "medication_tier": {
-          "type": "enum",
+        "medication_quantity": {
+          "type": "integer",
           "required": true,
-          "options": [
-            { "id": "none", "label_zh_hant": "無處方藥" },
-            { "id": "low", "label_zh_hant": "少量（1–2種）" },
-            { "id": "medium", "label_zh_hant": "中量（3–4種）" },
-            { "id": "high", "label_zh_hant": "多量（≥5種）" }
-          ],
-          "notes_zh_hant": "用於估算補藥節奏與高峰月風險；不代表藥價。"
+          "min": 0,
+          "max": 10,
+          "default": 0,
+          "notes_zh_hant": "每月藥物數量（0-10種），用於更準確計算月度藥費。"
         }
       }
     }
@@ -139,14 +136,8 @@
     },
     "counts_towards_cap": {
       "principle_zh_hant": "只計算已繳付的合資格醫療費用及收費。",
-      "includes_examples_zh_hant": [
-        "公眾收費（符合資格人士）下的合資格醫療費用及收費"
-      ],
-      "excludes_examples_zh_hant": [
-        "自費藥物",
-        "自費醫療用品",
-        "非臨床需要服務相關收費"
-      ]
+      "includes_examples_zh_hant": ["公眾收費（符合資格人士）下的合資格醫療費用及收費"],
+      "excludes_examples_zh_hant": ["自費藥物", "自費醫療用品", "非臨床需要服務相關收費"]
     },
     "application_and_effect": {
       "not_automatic": true,

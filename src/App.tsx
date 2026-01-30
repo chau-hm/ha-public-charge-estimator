@@ -33,7 +33,7 @@ export default function App() {
       service_type: 'sopc',
       followup_frequency_months: 3,
       next_followup_month: 1,
-      medication_tier: 'none',
+      medication_quantity: 0,
     };
     setSpecialties([...specialties, newSpecialty]);
   };
@@ -56,7 +56,7 @@ export default function App() {
           一個幫助你預計全年醫療費用的簡易工具。
         </p>
         <p className="intro-text">
-          根據你輸入的覆診月份、覆診頻率及藥物數量級，估算全年費用分佈與可能的高峰月份。
+          根據你輸入的覆診月份、覆診頻率及藥物數目，估算全年費用分佈與可能的高峰月份。
         </p>
         <div className="info-section">
           <h2>這個工具可以幫你什麼？</h2>
