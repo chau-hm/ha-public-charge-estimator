@@ -55,7 +55,9 @@ export default function App() {
         <p className="intro-text">
           一個幫助你預計全年醫療費用的簡易工具。
         </p>
-
+        <p className="intro-text">
+          根據你輸入的覆診月份、覆診頻率及藥物數量級，估算全年費用分佈與可能的高峰月份。
+        </p>
         <div className="info-section">
           <h2>這個工具可以幫你什麼？</h2>
           <ul className="features-list">
@@ -75,9 +77,7 @@ export default function App() {
           </ul>
         </div>
 
-        <p className="intro-text">
-          根據你輸入的覆診月份、覆診頻率及藥物數量級，估算全年費用分佈與可能的高峰月份。
-        </p>
+
         <div className="disclaimer-box">
           <strong>免責聲明：</strong>
           <p>{UI_LABELS.DISCLAIMERS.MAIN}</p>

@@ -41,15 +41,14 @@ export function AscPanel({ ascAdvisory }: AscPanelProps) {
       </div>
 
       <div className="asc-actions">
-        <button className="asc-action-button">
+        <a
+          href="https://www.ha.org.hk/visitor/ha_visitor_index.asp?Parent_ID=10044&Content_ID=281820&Ver=HTML&Lang=CHIB5"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="asc-action-button"
+        >
           {UI_LABELS.BUTTONS.LEARN_MORE_ASC}
-        </button>
-        <button className="asc-action-button">
-          {UI_LABELS.BUTTONS.HOW_TO_APPLY}
-        </button>
-        <button className="asc-action-button">
-          {UI_LABELS.BUTTONS.CONTACT_MSS}
-        </button>
+        </a>
       </div>
     </div>
   );
