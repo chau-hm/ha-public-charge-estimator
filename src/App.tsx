@@ -53,33 +53,20 @@ export default function App() {
       <header className="app-header">
         <h1>{UI_LABELS.PAGE_TITLE}</h1>
         <p className="intro-text">
-          一個幫助你預計全年醫療費用的簡易工具。
+          根據你輸入的覆診月份、覆診頻率及藥物數目，估算全年醫療費用分佈與高峰月份。
         </p>
-        <p className="intro-text">
-          根據你輸入的覆診月份、覆診頻率及藥物數目，估算全年費用分佈與可能的高峰月份。
-        </p>
+
         <div className="info-section">
-          <h2>這個工具可以幫你什麼？</h2>
+          <h2>核心功能</h2>
           <ul className="features-list">
-            <li>💰 <strong>預計全年醫療費用</strong> – 知道今年要花多少錢去睇醫生</li>
-            <li>📅 <strong>看清楚費用分佈</strong> – 知道哪幾個月費用會特別高</li>
-            <li>🎯 <strong>及早了解保障上限</strong> – 提醒你醫管局有 HK$10,000 全年上限，但需要主動申請</li>
+            <li>💰 <strong>全年費用預算</strong> – 知道今年大概要花幾多錢</li>
+            <li>📅 <strong>費用分佈明細</strong> – 查看每月花費，找出高峰月份</li>
+            <li>🛡️ <strong>全年保障提示</strong> – 及早提醒 HK$10,000 上限（需主動申請）</li>
           </ul>
         </div>
-
-        <div className="info-section">
-          <h2>誰適合用？</h2>
-          <ul className="suitable-list">
-            <li>✓ 需要同時睇多個專科的病人</li>
-            <li>✓ 長期服藥需要補藥的人</li>
-            <li>✓ 想了解今年醫療費用的家人</li>
-            <li>✓ 醫務社會服務人員</li>
-          </ul>
-        </div>
-
 
         <div className="disclaimer-box">
-          <strong>免責聲明：</strong>
+          <strong>重要聲明</strong>
           <p>{UI_LABELS.DISCLAIMERS.MAIN}</p>
           <p>{UI_LABELS.DISCLAIMERS.ASC}</p>
         </div>

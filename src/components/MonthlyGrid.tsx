@@ -28,7 +28,7 @@ export function MonthlyGrid({ monthlyTotals, breakdown, peakMonths }: MonthlyGri
 
   return (
     <div className="monthly-grid">
-      <h2>{UI_LABELS.MONTHLY_DISTRIBUTION.SECTION_TITLE}</h2>
+      <h2>📅 月份費用分佈</h2>
 
       <button
         onClick={() => setShowBreakdown(!showBreakdown)}

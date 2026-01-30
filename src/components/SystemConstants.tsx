@@ -8,7 +8,10 @@ import { UI_LABELS } from '../config';
 export function SystemConstants() {
   return (
     <div className="system-constants">
-      <h3>系統收費（唯讀）</h3>
+      <h3>🔧 系統常數</h3>
+      <p style={{ fontSize: '12px', color: '#888', marginBottom: '12px', lineHeight: '1.6' }}>
+        以下收費由醫管局統一規定，不可更改：
+      </p>
       <ul>
         <li>{UI_LABELS.FEE_DISPLAY.SOPC_VISIT}</li>
         <li>{UI_LABELS.FEE_DISPLAY.SOPC_MEDICATION}</li>

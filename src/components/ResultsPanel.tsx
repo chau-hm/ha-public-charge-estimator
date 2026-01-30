@@ -21,7 +21,7 @@ export function ResultsPanel({ result }: ResultsPanelProps) {
 
   return (
     <div className="results-panel">
-      <h2>{UI_LABELS.RESULTS.SECTION_TITLE}</h2>
+      <h2>📊 你的全年費用概覽</h2>
 
       <div className="results-kpis">
         <div className="kpi-card">

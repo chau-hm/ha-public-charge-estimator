@@ -30,7 +30,7 @@ export function AscPanel({ ascAdvisory }: AscPanelProps) {
 
   return (
     <div className={`asc-panel asc-${ascAdvisory.level}`}>
-      <h2>{UI_LABELS.ASC_ADVISORY.SECTION_TITLE}</h2>
+      <h2>全年醫療費用上限保障</h2>
 
       <div className="asc-common-info">
         {UI_LABELS.ASC_ADVISORY.COMMON_INFO}

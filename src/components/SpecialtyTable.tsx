@@ -23,7 +23,10 @@ export function SpecialtyTable({
 
   return (
     <div className="specialty-table">
-      <h2>你的專科與覆診資料</h2>
+      <h2>📋 你的專科和覆診</h2>
+      <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+        輸入你跟進的專科、覆診頻率及下次覆診月份，系統會推算全年的看診和藥費。
+      </p>
 
       {specialties.length > 0 && (
         <>
@@ -238,9 +241,9 @@ export function SpecialtyTable({
       <button onClick={onAdd} className="add-button primary">
         {UI_LABELS.BUTTONS.ADD_SPECIALTY}
       </button>
-          藥物數目只用於估算每月藥費，並不代表藥價或臨床判斷。
+
       <p className="helper-text">
-        請輸入每月服用的藥物數目（0-10種）。此數字僅供估算月度支出，並不代表實際藥價或臨床用藥判斷。
+        💡 輸入每月服用的藥物數目（0-10種），系統會據此估算月度費用。此數字僅供估算，不代表實際藥價。
       </p>
     </div>
   );
