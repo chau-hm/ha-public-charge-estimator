@@ -25,7 +25,7 @@ export function SpecialtyTable({
     <div className="specialty-table">
       <h2>📋 你的專科和覆診</h2>
       <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
-        輸入你跟進的專科、覆診頻率及下次覆診月份，系統會推算全年的看診和藥費。
+        輸入你跟進的專科、覆診頻率及覆診月份，系統會推算全年的看診和藥費。
       </p>
 
       {specialties.length > 0 && (

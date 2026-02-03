@@ -5,7 +5,7 @@
       "formula": "monthly_medication_fee = medication_quantity * medication_unit_fee"
     },
     "visit_scheduling": {
-      "rule": "Starting from next_followup_month (inclusive), schedule visits every followup_frequency_months within months 1-12",
+      "rule": "All 12 calendar months (Jan-Dec) are included in the fee distribution calculation. Starting from next_followup_month (inclusive), schedule visits every followup_frequency_months within months 1-12. Users can input past dates, so next_followup_month is not necessarily the current month.",
       "examples": {
         "next_followup_month_3_frequency_3": [
           false,

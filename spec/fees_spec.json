@@ -54,7 +54,7 @@
           "required": true,
           "min": 1,
           "max": 12,
-          "notes_zh_hant": "病人可從HA系統/提醒得知，用於月度分佈與高峰月推算。"
+          "notes_zh_hant": "下次覆診的月份（1-12）。患者可從HA系統/提醒得知，或用戶可輸入過去的月份。用於計算全年（1月至12月）月度分佈與高峰月推算。"
         },
         "long_term_followup": {
           "type": "boolean",

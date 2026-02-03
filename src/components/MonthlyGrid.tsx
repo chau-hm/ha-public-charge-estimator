@@ -15,16 +15,9 @@ export function MonthlyGrid({ monthlyTotals, breakdown, peakMonths }: MonthlyGri
     '7月', '8月', '9月', '10月', '11月', '12月',
   ];
 
-  // 從當前月份開始排列
-  const currentMonth = new Date().getMonth(); // 0-11
-  const monthNames = [
-    ...allMonthNames.slice(currentMonth),
-    ...allMonthNames.slice(0, currentMonth),
-  ];
-  const monthIndices = [
-    ...Array.from({ length: 12 - currentMonth }, (_, i) => currentMonth + i),
-    ...Array.from({ length: currentMonth }, (_, i) => i),
-  ];
+  // 始終從一月開始排列，顯示完整的日曆年
+  const monthNames = allMonthNames;
+  const monthIndices = Array.from({ length: 12 }, (_, i) => i);
 
   return (
     <div className="monthly-grid">

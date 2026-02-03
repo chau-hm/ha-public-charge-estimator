@@ -64,7 +64,7 @@ export const UI_LABELS = {
     SPECIALTY_NAME: "專科名稱",
     SERVICE_TYPE: "服務類型",
     FOLLOWUP_FREQUENCY: "覆診頻率（每幾個月一次）",
-    NEXT_FOLLOWUP_MONTH: "下次覆診月份",
+    NEXT_FOLLOWUP_MONTH: "覆診月份",
     MEDICATION: "藥物數目（每月）",
     REMOVE: "移除"
   },

@@ -17,10 +17,11 @@ import type {
 } from "./types";
 
 /**
- * Generate visit schedule for a specialty across 12 months
- * @param nextMonth - Next followup month (1-12)
+ * Generate visit schedule for a specialty across all 12 calendar months (Jan-Dec)
+ * @param nextMonth - The next followup month (1-12). Can be a past month (e.g., user inputs previous month's appointment)
  * @param frequencyMonths - Followup frequency in months (1, 2, 3, 4, or 6)
  * @returns Boolean array of 12 elements (true = visit occurs in that month)
+ * @note All 12 calendar months are included in the fee distribution calculation
  */
 export function generateVisitScheduleMonths(
   nextMonth: MonthNumber,
@@ -60,8 +61,10 @@ function getFeesByServiceType(serviceType: ServiceType): {
 
 /**
  * Calculate monthly totals and breakdown for given specialty inputs
+ * Computes fees across all 12 calendar months (Jan-Dec), including medications for all months
+ * and visit fees based on the next_followup_month and frequency schedule
  * @param inputs - Array of specialty inputs
- * @returns Object with monthly totals and breakdown
+ * @returns Object with monthly totals and breakdown for all 12 months
  */
 export function calculateMonthlyTotals(inputs: SpecialtyInput[]): {
   monthlyTotals: number[];
@@ -164,6 +167,10 @@ export function getAscAdvisory(annualTotal: number, ascAmount: number = ASC.AMOU
 
 /**
  * Main calculation function - calculate complete results for given inputs
+ * Calculates fees for all 12 calendar months (Jan-Dec), supporting:
+ * - Past and future dates (next_followup_month can be any month 1-12)
+ * - Annual charge cap (ASC) calculations for the full year
+ * - Monthly distribution of visits and medications
  * @param inputs - Array of specialty inputs
  * @returns Complete calculation result with monthly totals, breakdown, summary, and ASC advisory
  */
