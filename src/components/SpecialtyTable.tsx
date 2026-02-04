@@ -151,7 +151,7 @@ export function SpecialtyTable({
                             handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
                           }
                         >
-                          {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
+                          {Array.from({ length: 16 }, (_, i) => i).map((qty) => (
                             <option key={qty} value={qty}>
                               {qty}
                             </option>
@@ -283,7 +283,7 @@ export function SpecialtyTable({
                         handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
                       }
                     >
-                      {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
+                      {Array.from({ length: 16 }, (_, i) => i).map((qty) => (
                         <option key={qty} value={qty}>
                           {qty}
                         </option>
