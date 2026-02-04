@@ -19,7 +19,7 @@ import type {
 /**
  * Generate visit schedule for a specialty across all 12 calendar months (Jan-Dec)
  * @param nextMonth - The next followup month (1-12). Can be a past month (e.g., user inputs previous month's appointment)
- * @param frequencyMonths - Followup frequency in months (1, 2, 3, 4, or 6)
+ * @param frequencyMonths - Followup frequency in months (0 = visit once this year, 1-11 = visit every N months)
  * @returns Boolean array of 12 elements (true = visit occurs in that month)
  * @note All 12 calendar months are included in the fee distribution calculation
  */
@@ -28,6 +28,12 @@ export function generateVisitScheduleMonths(
   frequencyMonths: number
 ): VisitSchedule {
   const schedule: boolean[] = Array(12).fill(false);
+
+  // If frequency is 0, only one visit in the specified month
+  if (frequencyMonths === 0) {
+    schedule[nextMonth - 1] = true; // Convert to 0-indexed
+    return schedule;
+  }
 
   // Starting from nextMonth (inclusive), schedule visits every frequencyMonths
   for (let month = nextMonth; month <= 12; month += frequencyMonths) {
@@ -39,10 +45,14 @@ export function generateVisitScheduleMonths(
 
 /**
  * Get fee amounts based on service type
- * @param serviceType - Service type (sopc or gopc)
+ * @param serviceType - Service type (sopc, gopc, pathology, or radiology)
+ * @param serviceTier - Service tier (for pathology and radiology: advanced or premium)
  * @returns Object with visit and medication unit fees
  */
-function getFeesByServiceType(serviceType: ServiceType): {
+function getFeesByServiceType(
+  serviceType: ServiceType,
+  serviceTier?: "advanced" | "premium"
+): {
   visitFee: number;
   medUnitFee: number;
 } {
@@ -51,10 +61,23 @@ function getFeesByServiceType(serviceType: ServiceType): {
       visitFee: FEES.SOPC.VISIT,
       medUnitFee: FEES.SOPC.MEDICATION_UNIT
     };
-  } else {
+  } else if (serviceType === "gopc") {
     return {
       visitFee: FEES.GOPC.VISIT,
       medUnitFee: FEES.GOPC.MEDICATION_UNIT
+    };
+  } else if (serviceType === "pathology") {
+    const fee = serviceTier === "premium" ? FEES.PATHOLOGY.PREMIUM : FEES.PATHOLOGY.ADVANCED;
+    return {
+      visitFee: fee,
+      medUnitFee: FEES.PATHOLOGY.MEDICATION_UNIT
+    };
+  } else {
+    // radiology
+    const fee = serviceTier === "premium" ? FEES.RADIOLOGY.PREMIUM : FEES.RADIOLOGY.ADVANCED;
+    return {
+      visitFee: fee,
+      medUnitFee: FEES.RADIOLOGY.MEDICATION_UNIT
     };
   }
 }
@@ -76,7 +99,10 @@ export function calculateMonthlyTotals(inputs: SpecialtyInput[]): {
 
   // Process each specialty
   for (const specialty of inputs) {
-    const { visitFee, medUnitFee } = getFeesByServiceType(specialty.service_type);
+    const { visitFee, medUnitFee } = getFeesByServiceType(
+      specialty.service_type,
+      specialty.service_tier
+    );
 
     // Generate visit schedule
     const visitSchedule = generateVisitScheduleMonths(

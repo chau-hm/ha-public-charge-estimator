@@ -17,6 +17,10 @@ export function SystemConstants() {
         <li>{UI_LABELS.FEE_DISPLAY.SOPC_MEDICATION}</li>
         <li>{UI_LABELS.FEE_DISPLAY.GOPC_VISIT}</li>
         <li>{UI_LABELS.FEE_DISPLAY.GOPC_MEDICATION}</li>
+        <li>{UI_LABELS.FEE_DISPLAY.PATHOLOGY_ADVANCED}</li>
+        <li>{UI_LABELS.FEE_DISPLAY.PATHOLOGY_PREMIUM}</li>
+        <li>{UI_LABELS.FEE_DISPLAY.RADIOLOGY_ADVANCED}</li>
+        <li>{UI_LABELS.FEE_DISPLAY.RADIOLOGY_PREMIUM}</li>
         <li>{UI_LABELS.FEE_DISPLAY.ASC_INFO}</li>
       </ul>
     </div>

@@ -34,6 +34,7 @@ export default function App() {
       followup_frequency_months: 3,
       next_followup_month: 1,
       medication_quantity: 0,
+      service_tier: 'advanced', // Default tier for pathology/radiology
     };
     setSpecialties([...specialties, newSpecialty]);
   };

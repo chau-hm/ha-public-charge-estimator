@@ -40,14 +40,17 @@
           "default": "sopc",
           "options": [
             { "id": "sopc", "label_zh_hant": "專科門診" },
-            { "id": "gopc", "label_zh_hant": "普通科門診" }
+            { "id": "gopc", "label_zh_hant": "普通科門診" },
+            { "id": "pathology", "label_zh_hant": "病理學檢驗服務" },
+            { "id": "radiology", "label_zh_hant": "非緊急放射科服務" }
           ],
           "notes_zh_hant": "本期以門診為核心；其他服務類型可日後擴展。"
         },
         "followup_frequency_months": {
           "type": "enum",
           "required": true,
-          "options": [1, 2, 3, 4, 6]
+          "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+          "notes_zh_hant": "0 = 本年只覆診一次，1-11 = 每幾個月覆診一次"
         },
         "next_followup_month": {
           "type": "integer",
@@ -67,7 +70,16 @@
           "min": 0,
           "max": 10,
           "default": 0,
-          "notes_zh_hant": "每月藥物數量（0-10種），用於更準確計算月度藥費。"
+          "notes_zh_hant": "每月藥物數量（0-15種），用於更準確計算月度藥費。"
+        },
+        "service_tier": {
+          "type": "enum",
+          "required": false,
+          "options": [
+            { "id": "advanced", "label_zh_hant": "進階項目" },
+            { "id": "premium", "label_zh_hant": "高端項目" }
+          ],
+          "notes_zh_hant": "病理學檢驗服務及非緊急放射科服務需選擇服務級別。基礎項目免費不計入此工具。"
         }
       }
     }
@@ -120,6 +132,50 @@
         "charge_unit_basis": "per_clinic_per_4_weeks",
         "notes_zh_hant": "按每4星期為收費單位；不包括自費藥。"
       }
+    },
+    {
+      "id": "pathology_advanced",
+      "patient_type_id": "eligible_person",
+      "service_group": "pathology",
+      "service_type": "pathology",
+      "service_tier": "advanced",
+      "service_label_zh_hant": "病理學檢驗服務（進階項目）",
+      "amount": 50,
+      "unit_id": "per_attendance",
+      "notes_zh_hant": "基礎項目免費，不計入估算"
+    },
+    {
+      "id": "pathology_premium",
+      "patient_type_id": "eligible_person",
+      "service_group": "pathology",
+      "service_type": "pathology",
+      "service_tier": "premium",
+      "service_label_zh_hant": "病理學檢驗服務（高端項目）",
+      "amount": 200,
+      "unit_id": "per_attendance",
+      "notes_zh_hant": "基礎項目免費，不計入估算"
+    },
+    {
+      "id": "radiology_advanced",
+      "patient_type_id": "eligible_person",
+      "service_group": "radiology",
+      "service_type": "radiology",
+      "service_tier": "advanced",
+      "service_label_zh_hant": "非緊急放射科服務（進階項目）",
+      "amount": 250,
+      "unit_id": "per_attendance",
+      "notes_zh_hant": "基礎項目免費，不計入估算"
+    },
+    {
+      "id": "radiology_premium",
+      "patient_type_id": "eligible_person",
+      "service_group": "radiology",
+      "service_type": "radiology",
+      "service_tier": "premium",
+      "service_label_zh_hant": "非緊急放射科服務（高端項目）",
+      "amount": 500,
+      "unit_id": "per_attendance",
+      "notes_zh_hant": "基礎項目免費，不計入估算"
     }
   ],
   "annual_spending_cap": {

@@ -10,11 +10,12 @@
 | 欄位 | 型別 | 必填 | 說明 |
 |---|---|---:|---|
 | specialty_label | string | ✅ | 用戶輸入的專科名稱（識別用，唔影響收費常數） |
-| service_type | "sopc" \| "gopc" | ✅ | 服務類型：專科門診／普通科門診 |
-| followup_frequency_months | 1\|2\|3\|4\|6 | ✅ | 覆診頻率（每幾個月一次） |
+| service_type | "sopc" \| "gopc" \| "pathology" \| "radiology" | ✅ | 服務類型：專科門診／普通科門診／病理學檢驗／非緊急放射科 |
+| service_tier | "advanced" \| "premium" |  | 服務級別：進階項目／高端項目（僅病理學及放射科服務需要） |
+| followup_frequency_months | 0\|1\|2\|...\|11 | ✅ | 覆診頻率（0 = 本年只覆診一次；1-11 = 每幾個月覆診）|
 | next_followup_month | number (1..12) | ✅ | 下次覆診月份，用作月度分佈 offset |
 | long_term_followup | boolean | ✅ | 本期回歸假設 true；若 false 可只計一次（由實作另定） |
-| medication_quantity | number (0..10) | ✅ | 每月藥物數量（0-10種），用於準確計算藥費 |
+| medication_quantity | number (0..15) | ✅ | 每月藥物數量（0-15種），用於準確計算藥費 |
 
 ---
 

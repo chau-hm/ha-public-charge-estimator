@@ -3,10 +3,13 @@
  */
 
 // Service types
-export type ServiceType = "sopc" | "gopc";
+export type ServiceType = "sopc" | "gopc" | "pathology" | "radiology";
+
+// Service tier for pathology and radiology services
+export type ServiceTier = "advanced" | "premium";
 
 // Followup frequencies (in months)
-export type FollowupFrequency = 1 | 2 | 3 | 4 | 6;
+export type FollowupFrequency = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 // Month number (1-12)
 export type MonthNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -20,7 +23,8 @@ export interface SpecialtyInput {
   service_type: ServiceType;
   followup_frequency_months: FollowupFrequency;
   next_followup_month: MonthNumber;
-  medication_quantity: number; // 0-10 medication units per month
+  medication_quantity: number; // 0-15 medication units per month
+  service_tier?: ServiceTier; // Required for pathology and radiology services
 }
 
 /**

@@ -13,6 +13,16 @@ export const FEES = {
   GOPC: {
     VISIT: 150, // HK$ per attendance
     MEDICATION_UNIT: 5 // HK$ per 4 weeks
+  },
+  PATHOLOGY: {
+    ADVANCED: 50, // HK$ per service (進階項目)
+    PREMIUM: 200, // HK$ per service (高端項目)
+    MEDICATION_UNIT: 0 // No medication
+  },
+  RADIOLOGY: {
+    ADVANCED: 250, // HK$ per service (進階項目)
+    PREMIUM: 500, // HK$ per service (高端項目)
+    MEDICATION_UNIT: 0 // No medication
   }
 } as const;
 
@@ -36,12 +46,14 @@ export const ADVISORY_BANDS = {
 } as const;
 
 // Followup frequency options (in months)
-export const FOLLOWUP_FREQUENCIES = [1, 2, 3, 4, 6] as const;
+export const FOLLOWUP_FREQUENCIES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 
 // Service types
 export const SERVICE_TYPES = {
   SOPC: "sopc",
-  GOPC: "gopc"
+  GOPC: "gopc",
+  PATHOLOGY: "pathology",
+  RADIOLOGY: "radiology"
 } as const;
 
 // UI Labels (Traditional Chinese - Hong Kong)
@@ -58,11 +70,16 @@ export const UI_LABELS = {
     SOPC_MEDICATION: "專科門診藥費：HK$20／每4星期（系統按月估算）",
     GOPC_VISIT: "普通科門診診症費：HK$150／次",
     GOPC_MEDICATION: "普通科門診藥費：HK$5／每4星期（系統按月估算）",
+    PATHOLOGY_ADVANCED: "病理學檢驗服務（進階項目）：HK$50／次",
+    PATHOLOGY_PREMIUM: "病理學檢驗服務（高端項目）：HK$200／次",
+    RADIOLOGY_ADVANCED: "非緊急放射科服務（進階項目）：HK$250／次",
+    RADIOLOGY_PREMIUM: "非緊急放射科服務（高端項目）：HK$500／次",
     ASC_INFO: "ASC：HK$10,000（提示：需申請＋審核，非自動）"
   },
   FIELDS: {
     SPECIALTY_NAME: "專科名稱",
     SERVICE_TYPE: "服務類型",
+    SERVICE_TIER: "服務級別",
     FOLLOWUP_FREQUENCY: "覆診頻率（每幾個月一次）",
     NEXT_FOLLOWUP_MONTH: "覆診月份",
     MEDICATION: "藥物數目（每月）",
@@ -70,7 +87,13 @@ export const UI_LABELS = {
   },
   SERVICE_TYPE_OPTIONS: {
     SOPC: "專科門診",
-    GOPC: "普通科門診"
+    GOPC: "普通科門診",
+    PATHOLOGY: "病理學檢驗服務",
+    RADIOLOGY: "非緊急放射科服務"
+  },
+  SERVICE_TIER_OPTIONS: {
+    ADVANCED: "進階項目",
+    PREMIUM: "高端項目"
   },
   RESULTS: {
     SECTION_TITLE: "估算結果",

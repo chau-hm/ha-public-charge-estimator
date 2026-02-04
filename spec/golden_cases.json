@@ -355,6 +355,102 @@
         "peak_months": [8],
         "peak_total": 270
       }
+    },
+    {
+      "case_id": "case_011_single_pathology_q2",
+      "description": "Single pathology service (advanced), bi-monthly visits starting month 1, no medication",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "血液檢驗",
+            "service_type": "pathology",
+            "service_tier": "advanced",
+            "followup_frequency_months": 2,
+            "next_followup_month": 1,
+            "medication_quantity": 0
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [50, 0, 50, 0, 50, 0, 50, 0, 50, 0, 50, 0],
+        "breakdown": {
+          "visits": [50, 0, 50, 0, 50, 0, 50, 0, 50, 0, 50, 0],
+          "medications": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        "annual_total": 300,
+        "monthly_average": 25,
+        "peak_months": [1, 3, 5, 7, 9, 11],
+        "peak_total": 50
+      }
+    },
+    {
+      "case_id": "case_012_single_radiology_q3",
+      "description": "Single radiology service (premium), quarterly visits starting month 2, no medication",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "X光檢查",
+            "service_type": "radiology",
+            "service_tier": "premium",
+            "followup_frequency_months": 3,
+            "next_followup_month": 2,
+            "medication_quantity": 0
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [0, 500, 0, 0, 500, 0, 0, 500, 0, 0, 500, 0],
+        "breakdown": {
+          "visits": [0, 500, 0, 0, 500, 0, 0, 500, 0, 0, 500, 0],
+          "medications": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        "annual_total": 2000,
+        "monthly_average": 166.67,
+        "peak_months": [2, 5, 8, 11],
+        "peak_total": 500
+      }
+    },
+    {
+      "case_id": "case_013_mixed_with_pathology_radiology",
+      "description": "SOPC with medication, pathology (advanced) and radiology (advanced) (no medication)",
+      "inputs": {
+        "specialties": [
+          {
+            "specialty_label": "心臟科",
+            "service_type": "sopc",
+            "followup_frequency_months": 3,
+            "next_followup_month": 1,
+            "medication_quantity": 2
+          },
+          {
+            "specialty_label": "血液檢驗",
+            "service_type": "pathology",
+            "service_tier": "advanced",
+            "followup_frequency_months": 2,
+            "next_followup_month": 2,
+            "medication_quantity": 0
+          },
+          {
+            "specialty_label": "X光檢查",
+            "service_type": "radiology",
+            "service_tier": "advanced",
+            "followup_frequency_months": 4,
+            "next_followup_month": 3,
+            "medication_quantity": 0
+          }
+        ]
+      },
+      "expected": {
+        "monthly_totals": [290, 90, 290, 340, 40, 90, 540, 90, 40, 340, 290, 90],
+        "breakdown": {
+          "visits": [250, 50, 250, 300, 0, 50, 500, 50, 0, 300, 250, 50],
+          "medications": [40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40]
+        },
+        "annual_total": 2530,
+        "monthly_average": 210.83,
+        "peak_months": [7],
+        "peak_total": 540
+      }
     }
   ]
 }

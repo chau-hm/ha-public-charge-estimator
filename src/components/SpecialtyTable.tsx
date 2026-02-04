@@ -6,6 +6,16 @@
 import type { SpecialtyInput, SpecialtyTableProps, MonthNumber } from '../types';
 import { UI_LABELS, FOLLOWUP_FREQUENCIES, SERVICE_TYPES } from '../config';
 
+// Helper function to check if service type supports medication
+function hasMedication(serviceType: string): boolean {
+  return serviceType === 'sopc' || serviceType === 'gopc';
+}
+
+// Helper function to check if service type requires tier selection
+function requiresTier(serviceType: string): boolean {
+  return serviceType === 'pathology' || serviceType === 'radiology';
+}
+
 export function SpecialtyTable({
   specialties,
   onAdd,
@@ -37,6 +47,7 @@ export function SpecialtyTable({
                 <tr>
                   <th>{UI_LABELS.FIELDS.SPECIALTY_NAME}</th>
                   <th>{UI_LABELS.FIELDS.SERVICE_TYPE}</th>
+                  <th>{UI_LABELS.FIELDS.SERVICE_TIER}</th>
                   <th>{UI_LABELS.FIELDS.FOLLOWUP_FREQUENCY}</th>
                   <th>{UI_LABELS.FIELDS.NEXT_FOLLOWUP_MONTH}</th>
                   <th>{UI_LABELS.FIELDS.MEDICATION}</th>
@@ -69,7 +80,32 @@ export function SpecialtyTable({
                         <option value={SERVICE_TYPES.GOPC}>
                           {UI_LABELS.SERVICE_TYPE_OPTIONS.GOPC}
                         </option>
+                        <option value="pathology">
+                          {UI_LABELS.SERVICE_TYPE_OPTIONS.PATHOLOGY}
+                        </option>
+                        <option value="radiology">
+                          {UI_LABELS.SERVICE_TYPE_OPTIONS.RADIOLOGY}
+                        </option>
                       </select>
+                    </td>
+                    <td>
+                      {requiresTier(specialty.service_type) ? (
+                        <select
+                          value={specialty.service_tier || 'advanced'}
+                          onChange={(e) =>
+                            handleFieldChange(index, 'service_tier', e.target.value)
+                          }
+                        >
+                          <option value="advanced">
+                            {UI_LABELS.SERVICE_TIER_OPTIONS.ADVANCED}
+                          </option>
+                          <option value="premium">
+                            {UI_LABELS.SERVICE_TIER_OPTIONS.PREMIUM}
+                          </option>
+                        </select>
+                      ) : (
+                        <span style={{ color: '#999' }}>—</span>
+                      )}
                     </td>
                     <td>
                       <select
@@ -84,7 +120,7 @@ export function SpecialtyTable({
                       >
                         {FOLLOWUP_FREQUENCIES.map((freq) => (
                           <option key={freq} value={freq}>
-                            每 {freq} 個月
+                            {freq === 0 ? '本年只覆診一次' : `每 ${freq} 個月`}
                           </option>
                         ))}
                       </select>
@@ -108,18 +144,22 @@ export function SpecialtyTable({
                       </select>
                     </td>
                     <td>
-                      <select
-                        value={specialty.medication_quantity}
-                        onChange={(e) =>
-                          handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
-                        }
-                      >
-                        {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
-                          <option key={qty} value={qty}>
-                            {qty}
-                          </option>
-                        ))}
-                      </select>
+                      {hasMedication(specialty.service_type) ? (
+                        <select
+                          value={specialty.medication_quantity}
+                          onChange={(e) =>
+                            handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
+                          }
+                        >
+                          {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
+                            <option key={qty} value={qty}>
+                              {qty}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span style={{ color: '#999' }}>無</span>
+                      )}
                     </td>
                     <td>
                       <button
@@ -166,8 +206,33 @@ export function SpecialtyTable({
                     <option value={SERVICE_TYPES.GOPC}>
                       {UI_LABELS.SERVICE_TYPE_OPTIONS.GOPC}
                     </option>
+                    <option value="pathology">
+                      {UI_LABELS.SERVICE_TYPE_OPTIONS.PATHOLOGY}
+                    </option>
+                    <option value="radiology">
+                      {UI_LABELS.SERVICE_TYPE_OPTIONS.RADIOLOGY}
+                    </option>
                   </select>
                 </div>
+
+                {requiresTier(specialty.service_type) && (
+                  <div className="card-field">
+                    <label>{UI_LABELS.FIELDS.SERVICE_TIER}</label>
+                    <select
+                      value={specialty.service_tier || 'advanced'}
+                      onChange={(e) =>
+                        handleFieldChange(index, 'service_tier', e.target.value)
+                      }
+                    >
+                      <option value="advanced">
+                        {UI_LABELS.SERVICE_TIER_OPTIONS.ADVANCED}
+                      </option>
+                      <option value="premium">
+                        {UI_LABELS.SERVICE_TIER_OPTIONS.PREMIUM}
+                      </option>
+                    </select>
+                  </div>
+                )}
 
                 <div className="card-field">
                   <label>{UI_LABELS.FIELDS.FOLLOWUP_FREQUENCY}</label>
@@ -183,7 +248,7 @@ export function SpecialtyTable({
                   >
                     {FOLLOWUP_FREQUENCIES.map((freq) => (
                       <option key={freq} value={freq}>
-                        每 {freq} 個月
+                        {freq === 0 ? '本年只覆診一次' : `每 ${freq} 個月`}
                       </option>
                     ))}
                   </select>
@@ -211,18 +276,22 @@ export function SpecialtyTable({
 
                 <div className="card-field">
                   <label>{UI_LABELS.FIELDS.MEDICATION}</label>
-                  <select
-                    value={specialty.medication_quantity}
-                    onChange={(e) =>
-                      handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
-                    }
-                  >
-                    {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
-                      <option key={qty} value={qty}>
-                        {qty}
-                      </option>
-                    ))}
-                  </select>
+                  {hasMedication(specialty.service_type) ? (
+                    <select
+                      value={specialty.medication_quantity}
+                      onChange={(e) =>
+                        handleFieldChange(index, 'medication_quantity', parseInt(e.target.value))
+                      }
+                    >
+                      {Array.from({ length: 11 }, (_, i) => i).map((qty) => (
+                        <option key={qty} value={qty}>
+                          {qty}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span style={{ color: '#999' }}>此服務類型無藥費</span>
+                  )}
                 </div>
 
                 <button
@@ -243,7 +312,7 @@ export function SpecialtyTable({
       </button>
 
       <p className="helper-text">
-        💡 輸入每月服用的藥物數目（0-10種），系統會據此估算月度費用。此數字僅供估算，不代表實際藥價。
+        💡 對於專科及普通科門診，輸入每月服用的藥物數目（0-15種），系統會據此估算月度費用。此數字僅供估算，不代表實際藥價。病理學及放射科服務無藥費。
       </p>
     </div>
   );
